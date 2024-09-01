@@ -10,8 +10,8 @@ var ErrHandlerStopped = errors.New("tcp handler stopped")
 
 type Handler struct {
 	listener net.Listener
-	context context.Context
-	cancel  context.CancelCauseFunc
+	context  context.Context
+	cancel   context.CancelCauseFunc
 }
 
 func (handler *Handler) Start(ctx context.Context) {
@@ -63,6 +63,6 @@ func (handler *Handler) run() {
 
 func (handler *Handler) accept(conn net.Conn) {
 	for {
-        
+
 	}
 }

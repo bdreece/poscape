@@ -62,5 +62,5 @@ func (cmd setPrintMode) WriteTo(w io.Writer) (int64, error) {
 }
 
 func SetPrintMode(mode PrintMode) Command {
-    return setPrintMode{mode}
+	return setPrintMode{mode}
 }

@@ -14,10 +14,10 @@ type KeyMap struct {
 
 func DefaultKeyMap() KeyMap {
 	return KeyMap{
-        Help: key.NewBinding(
-            key.WithKeys("h", "ctrl+h"),
-            key.WithHelp("h/ctrl+h", "help"),
-        ),
+		Help: key.NewBinding(
+			key.WithKeys("h", "ctrl+h"),
+			key.WithHelp("h/ctrl+h", "help"),
+		),
 		Edit: key.NewBinding(
 			key.WithKeys("e", "ctrl+e"),
 			key.WithHelp("e/ctrl+e", "edit"),

@@ -6,15 +6,15 @@ import (
 )
 
 type (
-    // Command provides the contract for data sent to an ESC/POS-compliant printer.
+	// Command provides the contract for data sent to an ESC/POS-compliant printer.
 	Command interface {
 		io.WriterTo
 	}
 
-    // Text represents plain, writable ASCII text sent as a Command.
+	// Text represents plain, writable ASCII text sent as a Command.
 	Text string
 
-    Raw []byte
+	Raw []byte
 )
 
 const (
@@ -43,16 +43,16 @@ func (raw Raw) GoString() string { return fmt.Sprintf("escpos.Raw{%X}", string(r
 func (raw Raw) WriteTo(w io.Writer) (int64, error) { return write(w, []byte(raw)...) }
 
 func Write(w io.Writer, cmds ...Command) (total int64, err error) {
-    var n int64
-    for _, cmd := range cmds {
-        n, err = cmd.WriteTo(w)
-        total += n
-        if err != nil {
-            return
-        }
-    }
+	var n int64
+	for _, cmd := range cmds {
+		n, err = cmd.WriteTo(w)
+		total += n
+		if err != nil {
+			return
+		}
+	}
 
-    return
+	return
 }
 
 func write(w io.Writer, data ...byte) (int64, error) {
@@ -61,9 +61,9 @@ func write(w io.Writer, data ...byte) (int64, error) {
 }
 
 func bit(val bool) byte {
-    if val {
-        return 1
-    } else {
-        return 0
-    }
+	if val {
+		return 1
+	} else {
+		return 0
+	}
 }

@@ -16,8 +16,8 @@ type (
 		height int
 		keys   KeyMap
 
-		help    help.Model
-		page   pageModel
+		help help.Model
+		page pageModel
 	}
 
 	pageModel interface {
@@ -72,10 +72,10 @@ func (m Model) View() string {
 
 func New(width, height int) Model {
 	return Model{
-        width: width,
-        height: height,
-        keys: DefaultKeyMap(),
-        help: help.New(),
-        page: editor.New(),
-    }
+		width:  width,
+		height: height,
+		keys:   DefaultKeyMap(),
+		help:   help.New(),
+		page:   editor.New(),
+	}
 }

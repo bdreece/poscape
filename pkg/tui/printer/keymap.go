@@ -18,5 +18,5 @@ func (k KeyMap) ShortHelp() []key.Binding {
 }
 
 func DefaultKeyMap() KeyMap {
-    return KeyMap{}
+	return KeyMap{}
 }

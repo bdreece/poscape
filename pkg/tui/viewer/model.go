@@ -3,23 +3,23 @@ package viewer
 import tea "github.com/charmbracelet/bubbletea"
 
 type Model struct {
-    KeyMap
+	KeyMap
 }
 
 func (Model) Init() tea.Cmd {
-    return nil
+	return nil
 }
 
 func (m Model) Update(msg tea.Msg) (Model, tea.Cmd) {
-    return m, nil
+	return m, nil
 }
 
 func (m Model) View() string {
-    return ""
+	return ""
 }
 
 func New() Model {
-    return Model{
-        KeyMap: DefaultKeyMap(),
-    }
+	return Model{
+		KeyMap: DefaultKeyMap(),
+	}
 }

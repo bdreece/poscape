@@ -3,11 +3,11 @@ package escpos
 import "io"
 
 type setDoubleStrike struct {
-    enabled bool
+	enabled bool
 }
 
 func (cmd setDoubleStrike) WriteTo(w io.Writer) (int64, error) {
-    return write(w, esc, 'G', bit(cmd.enabled))
+	return write(w, esc, 'G', bit(cmd.enabled))
 }
 
 // Turn double-strike mode on/off.
@@ -18,5 +18,5 @@ func (cmd setDoubleStrike) WriteTo(w io.Writer) (int64, error) {
 //   - Double-strike mode can also be toggled by using [SetPrintMode]. However, the
 //     setting of the last received command is effective.
 func SetDoubleStrike(enabled bool) Command {
-    return setDoubleStrike{enabled}
+	return setDoubleStrike{enabled}
 }

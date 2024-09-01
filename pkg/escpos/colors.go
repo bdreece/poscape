@@ -3,12 +3,12 @@ package escpos
 import "io"
 
 type setInverseColors struct {
-    enabled bool
+	enabled bool
 }
 
 // WriteTo implements Command.
 func (cmd setInverseColors) WriteTo(w io.Writer) (int64, error) {
-    return write(w, gs, 'B', bit(cmd.enabled))
+	return write(w, gs, 'B', bit(cmd.enabled))
 }
 
 // Turn white/black reverse printing mode on/off.
@@ -25,5 +25,5 @@ func (cmd setInverseColors) WriteTo(w io.Writer) (int64, error) {
 //     mode. Even if underline mode is on, it is disabled (but not cancelled)
 //     while white/black reverse mode is on.
 func SetInverseColors(enabled bool) Command {
-    return setInverseColors{enabled}
+	return setInverseColors{enabled}
 }
