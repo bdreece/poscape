@@ -1,7 +1,10 @@
 //go:generate go run golang.org/x/tools/cmd/stringer@latest -type PrintMode -trimprefix With
 package escpos
 
-import "io"
+import (
+	"fmt"
+	"io"
+)
 
 type (
 	// PrintMode specifies bit-flag print settings, which may be combined using
@@ -18,8 +21,8 @@ type (
 	//     on the line are aligned at the baseline.
 	//   - [SetEmphasisMode] and [SetUnderlineMode] can also toggle emphasis and underline,
 	//     respectively. However, the setting of the last received command is effective.
-	SetPrintMode struct {
-		Mode PrintMode
+	setPrintMode struct {
+		mode PrintMode
 	}
 )
 
@@ -49,7 +52,15 @@ const (
 	WithUnderline
 )
 
+func (mode PrintMode) GoString() string {
+	return fmt.Sprintf("escpos.PrintMode(%s)", mode)
+}
+
 // WriteTo implements Command.
-func (cmd SetPrintMode) WriteTo(w io.Writer) (int64, error) {
-	return write(w, esc, '!', byte(cmd.Mode))
+func (cmd setPrintMode) WriteTo(w io.Writer) (int64, error) {
+	return write(w, esc, '!', byte(cmd.mode))
+}
+
+func SetPrintMode(mode PrintMode) Command {
+    return setPrintMode{mode}
 }

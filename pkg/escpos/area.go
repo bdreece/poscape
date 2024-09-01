@@ -2,6 +2,19 @@ package escpos
 
 import "io"
 
+type setPrintingArea struct {
+	x, y, w, h uint16
+}
+
+func (cmd setPrintingArea) WriteTo(w io.Writer) (int64, error) {
+	return write(w, esc, 'W',
+		byte(cmd.x & 0x0F), byte(cmd.x & 0xF0),
+		byte(cmd.y & 0x0F), byte(cmd.y & 0xF0),
+		byte(cmd.w & 0x0F), byte(cmd.w & 0xF0),
+		byte(cmd.h & 0x0F), byte(cmd.h & 0xF0),
+	)
+}
+
 // Set printing area in page mode.
 //
 // Each setting for the printable area is multiplied by the corresponding
@@ -15,15 +28,6 @@ import "io"
 //     standard mode.
 //   - If x or y are set outside the printable area, the printer stops command
 //     processing and processes the following data as normal data.
-type SetPrintingArea struct {
-	X, Y, W, H uint16
-}
-
-func (cmd SetPrintingArea) WriteTo(w io.Writer) (int64, error) {
-	return write(w, esc, 'W',
-		byte(cmd.X & 0x0F), byte(cmd.X & 0xF0),
-		byte(cmd.Y & 0x0F), byte(cmd.Y & 0xF0),
-		byte(cmd.W & 0x0F), byte(cmd.W & 0xF0),
-		byte(cmd.H & 0x0F), byte(cmd.H & 0xF0),
-	)
+func SetPrintingArea(x, y, w, h uint16) Command {
+    return setPrintingArea{x, y, w, h}
 }

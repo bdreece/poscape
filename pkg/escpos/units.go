@@ -2,6 +2,15 @@ package escpos
 
 import "io"
 
+type setMotionUnits struct {
+	x, y uint8
+}
+
+// WriteTo implements Command.
+func (cmd setMotionUnits) WriteTo(w io.Writer) (int64, error) {
+	return write(w, gs, 'P', cmd.x, cmd.y)
+}
+
 // Set horizontal and vertical motion units.
 //
 // Sets the horizontal and vertical motion units to 1/x inches and 1/y inches,
@@ -14,10 +23,6 @@ import "io"
 //   - In page mode, usage of the feed direction as either the vertical or
 //     horizontal direction determined by the start position of the printable
 //     area.
-type SetMotionUnits struct{
-    X, Y uint8
-}
-
-func (cmd SetMotionUnits) WriteTo(w io.Writer) (int64, error) {
-    return write(w, gs, 'P', cmd.X, cmd.Y)
+func SetMotionUnits(x, y uint8) Command {
+	return setMotionUnits{x, y}
 }

@@ -1,6 +1,8 @@
-package editor
+package printer
 
-import "github.com/charmbracelet/bubbles/key"
+import (
+	"github.com/charmbracelet/bubbles/key"
+)
 
 type KeyMap struct {
 }
@@ -16,5 +18,5 @@ func (k KeyMap) ShortHelp() []key.Binding {
 }
 
 func DefaultKeyMap() KeyMap {
-	return KeyMap{}
+    return KeyMap{}
 }

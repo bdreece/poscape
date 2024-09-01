@@ -1,4 +1,4 @@
-package viewer
+package printer
 
 import tea "github.com/charmbracelet/bubbletea"
 
@@ -19,7 +19,5 @@ func (m Model) View() string {
 }
 
 func New() Model {
-    return Model{
-        KeyMap: DefaultKeyMap(),
-    }
+    return Model{}
 }

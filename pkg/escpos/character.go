@@ -23,53 +23,24 @@ type (
 	// CodePage specifies the ASCII code page used to decode the text.
 	CodePage byte
 
-	// Select character size.
-	//
-	// Note:
-	//
-	//   - If the setting is outside of the defined range, this command is ignored.
-	//   - In standard mode, the vertical direction is the feed direction.
-	//   - In page mode, usage of the feed direction as either the vertical or
-	//     horizontal direction determined by the start position of the printable
-	//     area.
-	SetCharacterSize struct {
+	setCharacterSize struct {
 		W, H uint8
 	}
 
-	// Set right-side character spacing.
-	//
-	// Sets the character spacing for the right side of the character to
-	// (kerning * horizontal or vertical motion units).
-	//
-	// Note:
-	//
-	//   - The right-side character spacing for double-width mode is twice the normal
-	//     value.
-	//   - In standard mode, the horizontal motion unit is used.
-	//   - In page mode, usage of either the horizontal or vertical motion unit is
-	//     determined by the start position of the printable area.
-	SetKerning struct {
-		Kerning uint8
+	setKerning struct {
+		kerning uint8
 	}
 
-	// Select an international character set.
-	SetCharset struct {
-		Charset Charset
+	setCharset struct {
+		charset Charset
 	}
 
-	// Select character font.
-	//
-	// Note:
-	//
-	//   - Character font can also be set by using [SetPrintMode]. However, the
-	//     setting of the last received command is effective.
-	SetFont struct {
-		Font Font
+	setFont struct {
+		font Font
 	}
 
-	// Selects character code table.
-	SetCodePage struct {
-		Page CodePage
+	setCodePage struct {
+		codePage CodePage
 	}
 )
 
@@ -103,8 +74,36 @@ const (
 	CodePageSpace    CodePage = 255  // Space page
 )
 
+// GoString implements fmt.GoStringer
+func (f Font) GoString() string {
+	return fmt.Sprintf("escpos.Font(%s)", f)
+}
+
+// GoString implements fmt.GoStringer
+func (c Charset) GoString() string {
+	return fmt.Sprintf("escpos.Charset(%s)", c)
+}
+
+// GoString implements fmt.GoStringer
+func (c CodePage) GoString() string {
+	return fmt.Sprintf("escpos.CodePage(%s)", c)
+}
+
+// Select character size.
+//
+// Note:
+//
+//   - If the setting is outside of the defined range, this command is ignored.
+//   - In standard mode, the vertical direction is the feed direction.
+//   - In page mode, usage of the feed direction as either the vertical or
+//     horizontal direction determined by the start position of the printable
+//     area.
+func SetCharacterSize(w, h uint8) Command {
+	return setCharacterSize{w, h}
+}
+
 // WriteTo implements Command.
-func (cmd SetCharacterSize) WriteTo(w io.Writer) (int64, error) {
+func (cmd setCharacterSize) WriteTo(w io.Writer) (int64, error) {
 	if cmd.W > 7 || cmd.H > 7 {
 		return 0, fmt.Errorf("invalid width or height: (%d, %d)", cmd.W, cmd.H)
 	}
@@ -112,22 +111,58 @@ func (cmd SetCharacterSize) WriteTo(w io.Writer) (int64, error) {
 	return write(w, gs, '!', byte(cmd.W<<4)|byte(cmd.H&0x0F))
 }
 
-// WriteTo implements Command.
-func (cmd SetKerning) WriteTo(w io.Writer) (int64, error) {
-	return write(w, esc, ' ', byte(cmd.Kerning))
+// Set right-side character spacing.
+//
+// Sets the character spacing for the right side of the character to
+// (kerning * horizontal or vertical motion units).
+//
+// Note:
+//
+//   - The right-side character spacing for double-width mode is twice the normal
+//     value.
+//   - In standard mode, the horizontal motion unit is used.
+//   - In page mode, usage of either the horizontal or vertical motion unit is
+//     determined by the start position of the printable area.
+func SetKerning(kerning uint8) Command {
+	return setKerning{kerning}
 }
 
 // WriteTo implements Command.
-func (cmd SetCharset) WriteTo(w io.Writer) (int64, error) {
-	return write(w, esc, 'R', byte(cmd.Charset))
+func (cmd setKerning) WriteTo(w io.Writer) (int64, error) {
+	return write(w, esc, ' ', byte(cmd.kerning))
+}
+
+// Select an international character set.
+func SetCharset(charset Charset) Command {
+	return setCharset{charset}
 }
 
 // WriteTo implements Command.
-func (cmd SetFont) WriteTo(w io.Writer) (int64, error) {
-	return write(w, esc, 'M', byte(cmd.Font))
+func (cmd setCharset) WriteTo(w io.Writer) (int64, error) {
+	return write(w, esc, 'R', byte(cmd.charset))
+}
+
+// Select character font.
+//
+// Note:
+//
+//   - Character font can also be set by using [SetPrintMode]. However, the
+//     setting of the last received command is effective.
+func SetFont(font Font) Command {
+	return setFont{font}
 }
 
 // WriteTo implements Command.
-func (cmd SetCodePage) WriteTo(w io.Writer) (int64, error) {
-	return write(w, esc, 't', byte(cmd.Page))
+func (cmd setFont) WriteTo(w io.Writer) (int64, error) {
+	return write(w, esc, 'M', byte(cmd.font))
+}
+
+// Selects character code table.
+func SetCodePage(page CodePage) Command {
+	return setCodePage{page}
+}
+
+// WriteTo implements Command.
+func (cmd setCodePage) WriteTo(w io.Writer) (int64, error) {
+	return write(w, esc, 't', byte(cmd.codePage))
 }

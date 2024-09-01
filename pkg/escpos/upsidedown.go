@@ -2,6 +2,14 @@ package escpos
 
 import "io"
 
+type setUpsideDown struct {
+	enabled bool
+}
+
+func (cmd setUpsideDown) WriteTo(w io.Writer) (int64, error) {
+	return write(w, esc, '{', bit(cmd.enabled))
+}
+
 // Turn upside-down printing mode on/off.
 //
 // Note:
@@ -12,10 +20,6 @@ import "io"
 //     internal flag operation. This command has no effect in page mode.
 //   - In upside-down printing mode, both the text rotation and the line order
 //     are flipped, such that content order is preserved.
-type SetUpsideDown struct {
-    Enabled bool
-}
-
-func (cmd SetUpsideDown) WriteTo(w io.Writer) (int64, error) {
-    return write(w, esc, '{', bit(cmd.Enabled))
+func SetUpsideDown(enabled bool) Command {
+	return setUpsideDown{enabled}
 }

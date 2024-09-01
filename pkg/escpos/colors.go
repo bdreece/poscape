@@ -2,6 +2,15 @@ package escpos
 
 import "io"
 
+type setInverseColors struct {
+    enabled bool
+}
+
+// WriteTo implements Command.
+func (cmd setInverseColors) WriteTo(w io.Writer) (int64, error) {
+    return write(w, gs, 'B', bit(cmd.enabled))
+}
+
 // Turn white/black reverse printing mode on/off.
 //
 // Note:
@@ -15,11 +24,6 @@ import "io"
 //   - White/black reverse printing mode has a higher priority than underline
 //     mode. Even if underline mode is on, it is disabled (but not cancelled)
 //     while white/black reverse mode is on.
-type SetInverseColors struct {
-    Enabled bool
-}
-
-// WriteTo implements Command.
-func (cmd SetInverseColors) WriteTo(w io.Writer) (int64, error) {
-    return write(w, gs, 'B', bit(cmd.Enabled))
+func SetInverseColors(enabled bool) Command {
+    return setInverseColors{enabled}
 }

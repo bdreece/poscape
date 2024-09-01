@@ -2,6 +2,14 @@ package escpos
 
 import "io"
 
+type setRotation struct {
+	enabled bool
+}
+
+func (cmd setRotation) WriteTo(w io.Writer) (int64, error) {
+	return write(w, esc, 'V', bit(cmd.enabled))
+}
+
 // Turn 90° clockwise rotation on/off.
 //
 // Note:
@@ -13,10 +21,6 @@ import "io"
 //     in normal rotation mode.
 //   - This command affects printing in standard mode. However, the setting is
 //     always effective.
-type SetRotation struct{
-    Enabled bool
-}
-
-func (cmd SetRotation) WriteTo(w io.Writer) (int64, error) {
-    return write(w, esc, 'V', bit(cmd.Enabled))
+func SetRotation(enabled bool) Command {
+	return setRotation{enabled}
 }

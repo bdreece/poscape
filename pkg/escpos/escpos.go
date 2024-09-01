@@ -31,13 +31,13 @@ const (
 )
 
 // GoString implements fmt.GoStringer.
-func (txt Text) GoString() string { return fmt.Sprintf("Text: %q", string(txt)) }
+func (txt Text) GoString() string { return fmt.Sprintf("escpos.Text{%q}", string(txt)) }
 
 // WriteTo implements Command.
 func (txt Text) WriteTo(w io.Writer) (int64, error) { return write(w, []byte(txt)...) }
 
 // GoString implements fmt.GoStringer.
-func (raw Raw) GoString() string { return fmt.Sprintf("Raw: %X", string(raw)) }
+func (raw Raw) GoString() string { return fmt.Sprintf("escpos.Raw{%X}", string(raw)) }
 
 // WriteTo implements Command.
 func (raw Raw) WriteTo(w io.Writer) (int64, error) { return write(w, []byte(raw)...) }

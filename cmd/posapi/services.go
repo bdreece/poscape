@@ -1,10 +1,7 @@
 package main
 
 import (
-	"github.com/bdreece/poscape/pkg/event"
-	"github.com/bdreece/poscape/pkg/tui"
-	"github.com/charmbracelet/wish/activeterm"
-	"github.com/charmbracelet/wish/logging"
+	"github.com/bdreece/poscape/internal/event"
 	"go.uber.org/fx"
 )
 
@@ -18,10 +15,5 @@ var Services = fx.Module("services",
 			event.NewHub[string](),
 			fx.ResultTags(`name:"ssh"`),
 		),
-	),
-	fx.Provide(
-		activeterm.Middleware,
-		logging.Middleware,
-		tui.Middleware,
 	),
 )
